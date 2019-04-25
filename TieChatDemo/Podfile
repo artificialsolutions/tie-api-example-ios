@@ -1,0 +1,6 @@
+platform :ios, '8.0'
+#use_frameworks!
+
+pod 'TieApiClient', '~> 1.0.0'
+pod 'MessageKit'
+pod 'Scaledrone', '~> 0.3.0'
