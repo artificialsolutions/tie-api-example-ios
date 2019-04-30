@@ -3,7 +3,7 @@
 //  TieChatDemo
 //
 //  Created by Josh Galher on 24/10/2018.
-//  Copyright © 2018 ArtificialSolutions. All rights reserved.
+//  Copyright © 2019 ArtificialSolutions. All rights reserved.
 //
 
 import UIKit
@@ -14,7 +14,6 @@ import Accelerate
 
 
 class ViewController: MessagesViewController,
-    
     //Native iOS ASR/TTS delegates
     AVSpeechSynthesizerDelegate,
     SFSpeechRecognitionTaskDelegate,
@@ -26,12 +25,14 @@ class ViewController: MessagesViewController,
     var messages: [Message] = []
     var member: Member!
     var audioPlayer: AVAudioPlayer?
-    //**APP STARTUP FUNCTIONS
+    
+    //** STARTUP METHODS
     var timer:Timer
     required init?(coder decoder: NSCoder) {
         timer = Timer()
         super.init(coder: decoder)
     }
+    
     
     ///*** iOS Lifecycle methods:***
     override func viewDidLoad() {
@@ -52,6 +53,7 @@ class ViewController: MessagesViewController,
         let BASE_URL = "fill_in_base url_before_use";
         let ENDPOINT = "fill_in_endpoint_url_before_use";
         
+        //Setup TIE API
         do {
             try? TieApiService.sharedInstance.setup(BASE_URL, endpoint: ENDPOINT)
             print("TeneoEngine Service is SETUP")
@@ -59,7 +61,7 @@ class ViewController: MessagesViewController,
             print("ERROR SETUP TeneoEngine service")
         }
         
-        //Set up audio player for beeps, on the mic button
+        //Set up an audio player for beeps, to be used on the mic button
         do {
             self.audioPlayer =  try AVAudioPlayer(contentsOf: NSURL(fileURLWithPath: Bundle.main.path(forResource: "micon", ofType: "aiff")!) as URL)
         } catch {
@@ -68,8 +70,8 @@ class ViewController: MessagesViewController,
         //Set up audio seession features.
         setSessionPlayAndRecord()
         
-        // Listen for keyboard appearances and disappearances,
-        // keep the chat window scrolled all the way up in both cases
+        // Create Observers for keyboard appearances and disappearances,
+        // ...keep the chat window scrolled all the way up in both cases
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillDisappear), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillAppear), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
@@ -94,7 +96,8 @@ class ViewController: MessagesViewController,
     ///// END iOS lifecycle methods
     
     
-    //Keyboard listener methods
+    
+    //***Keyboard listener methods
     @objc func keyboardWillAppear() {
         messagesCollectionView.scrollToBottom(animated: true)
     }
@@ -102,8 +105,7 @@ class ViewController: MessagesViewController,
         messagesCollectionView.scrollToBottom(animated: true)
     }
     
-    
-    
+    //*** Microphone button methods
     func setMicrophoneButtonToOpened(){
         let micButton = makeButton(named: "ic_mic_red")
         let items = [micButton]
@@ -112,6 +114,7 @@ class ViewController: MessagesViewController,
             self.handleUserVoiceInput()
         }
     }
+    
     func setMicrophoneButtonToClosed(){
         let micButton = makeButton(named: "ic_mic")
         let items = [micButton]
@@ -120,9 +123,8 @@ class ViewController: MessagesViewController,
             self.handleUserVoiceInput()
         }
     }
-    
-    
-    //Returns input bar button
+
+    //Returns input bar button object
     private func makeButton(named: String) -> InputBarButtonItem {
         return InputBarButtonItem()
             .configure {
@@ -133,6 +135,20 @@ class ViewController: MessagesViewController,
         }
     }
     
+    
+    //Post user input to Chat UI and send it to engine
+    func consumeUserInput(userInput: String){
+        let newMessage = Message(
+            member: member,
+            text: userInput,
+            messageId: UUID().uuidString)
+        
+        //Post new user input to chat window, clear the text input box.
+        messages.append(newMessage)
+        self.messageInputBar.inputTextView.text=""
+        //Send result to Teneo Engine, and change microphone button UI to "Closed"
+        sendToTIE(textForEngine: newMessage.text)
+    }
     
     //Send message to Teneo Engine
     func sendToTIE(textForEngine: String){
@@ -166,9 +182,11 @@ class ViewController: MessagesViewController,
     }
     
     func handleUserVoiceInput(){
-        if(micEnabled==true){ //...if user wants to do voice input, (mic button is visible, keyboard is not visible and unavailable for input)
+        //Check wether ASR is allowed, that is, ...if user wants to do voice input, (mic button is visible, keyboard is not visible and unavailable for input)
+        if(micEnabled==true){
             stopTTSiOS12()
-            AVAudioSession.sharedInstance().requestRecordPermission () { //Check for Audio Permissions
+            // First, Check for Audio Permissions
+            AVAudioSession.sharedInstance().requestRecordPermission () {
                 [unowned self] allowed in
                 if allowed {
                     SFSpeechRecognizer.requestAuthorization { authStatus in
@@ -176,6 +194,7 @@ class ViewController: MessagesViewController,
                             switch authStatus{
                             case .authorized:
                                 print("Speech Recognition Permission: AUTHORIZED")
+                                //If permissions are OK, continue launching ASR:
                                 self.handleUserVoiceInputPermissionsOK()
                             case .denied:
                                 print("Speech Recognition Permission: DENIED")
@@ -205,17 +224,19 @@ class ViewController: MessagesViewController,
             }
             //cancels any ongoing ASR
             cancelNativeRecording();
+            
             //If no ASR transaction is active, start ASR
             if(isNativeASRBusy==false){
-                startAudioEngineAndNAtiveASR()
+                startAudioEngineAndNativeASR()
             }
             else{
-                stopNativeRecording() //If ASR is active, cancel it
+                //If ASR is active, cancel it
+                stopNativeRecording()
                 print("Stop Recording")
             }
             
             //Disables the microphone right after tapping it, and reenables it after 200 milliseconds.
-            //This allow the Audio object lifeycle enough time to free resources, and bacome available again.
+            //This allow the Audio object lifeycle enough time to free resources, and become available again.
             DispatchQueue.main.async {
                 self.timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector:  #selector(ViewController.enableMicWithDelay), userInfo: nil, repeats: false)
                 self.micEnabled=false
@@ -281,7 +302,7 @@ class ViewController: MessagesViewController,
             startASRAfterTTS=true
         }
         else{
-            startAudioEngineAndNAtiveASR()
+            startAudioEngineAndNativeASR()
         }
     }
     
@@ -313,10 +334,12 @@ class ViewController: MessagesViewController,
     }
     
     
-    func startAudioEngineAndNAtiveASR(){
-        if(isIOSTTS12speaking==true){ //stop any ongoing TTS
+    func startAudioEngineAndNativeASR(){
+        //stop any ongoing TTS
+        if(isIOSTTS12speaking==true){
             stopTTSiOS12()
         }
+        
         //Set up ASR recognizer, ASR request and delegate
         nativeASRRequest = SFSpeechAudioBufferRecognitionRequest()
         nativeSpeechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-GB"))!  //Setup SpeechRecognizer for UK English
@@ -345,7 +368,7 @@ class ViewController: MessagesViewController,
             print("ENGINE START EXCEPTION: "+error.description)
         }
         
-        //Activate [endOfSpeechTimeoutTimer]. This timer is invalidated when user speech is first detected.
+        //Activate [endOfSpeechTimeoutTimer]. This timer is later if invalidated when user speech is first detected.
         self.endOfSpeechTimeoutTimer = Timer.scheduledTimer(timeInterval: firstSpeechTimeoutSeconds, target: self, selector:  #selector(ViewController.stopNativeRecording), userInfo: nil, repeats: false)
     }
     
@@ -386,20 +409,13 @@ class ViewController: MessagesViewController,
         let finalASRresult=recognitionResult.bestTranscription.formattedString
         print("-NATIVE ASR - RESULT: "+finalASRresult)
         
+        //Consume ASR result, and change microphone button UI to "Closed"
         if (!(finalASRresult.isEmpty)){
-            let newMessage = Message(
-                member: member,
-                text: finalASRresult,
-                messageId: UUID().uuidString)
-            
-            //Post new user input to chat window, clear the text input box.
-            messages.append(newMessage)
+            consumeUserInput(userInput: finalASRresult);
             self.messageInputBar.inputTextView.text=""
-            
-            //Send result to Teneo Engine, and change microphone button UI to "Closed"
-            sendToTIE(textForEngine: newMessage.text)
             setMicrophoneButtonToClosed()
         }
+        
         isNativeASRBusy=false
     }
     
@@ -443,13 +459,14 @@ class ViewController: MessagesViewController,
         inputNode?.removeTap(onBus: 0)
         inputNode=nil
     }
+    ///^^ END NATIVE ASR delegate methods^^
     
     
     //TTS (Native iOS12 Text-to-Speech) helper methods
     var ttsIOS = AVSpeechSynthesizer()
     var isIOSTTS12speaking=false
-    func speakIOS12TTS(_ s:String){
-        print("doTTS native IOS12: "+s)
+    func speakIOS12TTS(_ utterance:String){
+        print("doTTS native IOS12: "+utterance)
         
         //display available male/female voice actor names for different accents:
         //print(AVSpeechSynthesisVoice.speechVoices())
@@ -459,7 +476,7 @@ class ViewController: MessagesViewController,
         if(isIOSTTS12speaking){
             ttsIOS.pauseSpeaking(at: .word)
         }
-        let speechUtterance = AVSpeechUtterance(string: s)
+        let speechUtterance = AVSpeechUtterance(string: utterance)
         ttsIOS.speak(speechUtterance)
     }
     
@@ -472,7 +489,7 @@ class ViewController: MessagesViewController,
     }
     
     
-    //TTS (Text-to-Speech) delegate methods
+    //*** TTS (Text-to-Speech) delegate methods
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
         print("*TTSiOS12 - didStartSpeechUtterance")
         isIOSTTS12speaking=true
@@ -488,7 +505,7 @@ class ViewController: MessagesViewController,
             timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector:  #selector(ViewController.doNativeRecording), userInfo: nil, repeats: false)
         }
     }
-
+    //*** TTS (Text-to-Speech) delegate methods
 }
 
 
@@ -563,15 +580,11 @@ extension ViewController: MessageInputBarDelegate {
     
     //Handle "Send" button events
     func messageInputBar(_ inputBar: MessageInputBar, didPressKeyboardSendButton text: String) {
+        
         //If textbox is not empty, post a message bubble on the UI and send the text to Teneo Engine
         if(!text.isEmpty){
-            let newMessage = Message(
-                member: member,
-                text: text,
-                messageId: UUID().uuidString)
-            messages.append(newMessage)
             inputBar.inputTextView.text = ""
-            sendToTIE(textForEngine: newMessage.text)
+            consumeUserInput(userInput: text)
             
             //Update chat scrollview and scroll to bottom
             messagesCollectionView.reloadData()
