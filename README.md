@@ -7,7 +7,7 @@ This sample project shows the capabilities of the TIE SDK, working in conjunctio
    - A Chat type UI,that is based on MessageKit, but self-contained.
 
 ## Prerequisites
-   - You need to know the engine url of a published bot.
+   - You need to know the engine URL of a published bot.
    - Grant Microphone Usage and Speech Recognition to enable voice commands on the app
 
 ## Installation
@@ -37,16 +37,16 @@ Also, user input incoming from ASR or the keyboard are posted to the Chat UI, an
 This project implements Apple's native iOS ASR with [```SFSpeechRecognizer```](https://developer.apple.com/documentation/speech/sfspeechrecognizer).
 Behind other helper methods that validate app permissions and other conditions, sits the ```startAudioEngineAndNativeASR``` method, which does two main tasks:
 
--Initialize an ```SFSRecognizer``` to a specific Language (en-GB by default).
+-Initialize an ```SFSRecognizer``` to a specific Language (```en-GB``` by default).
 
 -Initialize an audio engine, and feed streaming audio data into an ASR Request for processing.
 
-Tapping the microphone button silences any TTS playback before launching ASR. Transcription results are received at the ```didFinishRecognition``` delegate method, posted as a message bubbles into the Chat UI and then sent to Engine for processing.
+Tapping the microphone button silences any TTS playback before launching ASR. Transcription results are received at the ```didFinishRecognition``` delegate method, posted as a message bubbles into the Chat UI and finally sent to Engine for processing.
 
 ### TTS
 TTS is implemented with Apple's iOS native [```AVSpeechSynthesizer```](https://developer.apple.com/documentation/avfoundation/avspeechsynthesizer).
 The object ```AVSpeechSynthesizer``` within the project is the center of voice synthesis, and is initialized, launched and released throughout the lifecycle.
-In this project, the method ```speakIOS12TTS(_ s:String)```  speaks out loud the bot responses received from Teneo Engine.
+In this project, the method ```speakIOS12TTS(_ utterance:String)```  speaks out loud the bot responses received from Teneo Engine.
 
 ### Chat UI
 The Chat UI and input bar are based on the [MessageKit](https://github.com/MessageKit/MessageKit) framework, but implemented as a self contained class inside this project.
