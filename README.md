@@ -18,7 +18,7 @@ This sample project shows the capabilities of the TIE SDK, working in conjunctio
 
 ## Project elements Documentation
 ### TIE SDK connectivity.
-This project follows TIE SDK connectivity guidelines which are fully detailed in[tie-api-example-ios](https://github.com/artificialsolutions/tie-api-example-ios) example.
+This project follows TIE SDK connectivity guidelines which are fully detailed in [tie-api-example-ios](https://github.com/artificialsolutions/tie-api-example-ios) example.
 This dependency in the **Podfile** file enables the app to use the TIE SDK and communicate with Teneo Engine.
 
 The ```viewDidLoad``` method of the app initializes, among other things, the ```TieApiService``` and UI elements.
@@ -35,7 +35,9 @@ Also, user input incoming from ASR or the keyboard are posted to the Chat UI, an
 ### Speech Recognition (ASR)
 This project implements Apple's native iOS ASR with [***SFSpeechRecognizer***](https://developer.apple.com/documentation/speech/sfspeechrecognizer).
 Behind other helper methods that validate app permissions and other conditions, sits the ```startAudioEngineAndNativeASR``` method, which does two main tasks:
+
 -Initialize an SFSRecognizer to a specific Language (en-GB by default).
+
 -Initialize an audio engine, and feed streaming audio data into an ASR Request for processing.
 
 Tapping the microphone button silences any TTS playback before launching ASR. Transcription results are received at the ```didFinishRecognition`` delegate method, posted as a message bubbles into the Chat UI and then sent to Engine for processing.
