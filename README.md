@@ -40,7 +40,7 @@ Behind other helper methods that validate app permissions and other conditions, 
 
 -Initialize an audio engine, and feed streaming audio data into an ASR Request for processing.
 
-Tapping the microphone button silences any TTS playback before launching ASR. Transcription results are received at the ```didFinishRecognition`` delegate method, posted as a message bubbles into the Chat UI and then sent to Engine for processing.
+Tapping the microphone button silences any TTS playback before launching ASR. Transcription results are received at the ```didFinishRecognition``` delegate method, posted as a message bubbles into the Chat UI and then sent to Engine for processing.
 
 ### TTS
 TTS is implemented with Apple's iOS native [AVSpeechSynthesizer](https://developer.apple.com/documentation/avfoundation/avspeechsynthesizer).
