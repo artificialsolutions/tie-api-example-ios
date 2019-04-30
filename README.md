@@ -32,6 +32,7 @@ Also, user input incoming from ASR or the keyboard are posted to the Chat UI, an
 ```consumeUserInput(userInput: String)```
 
 
+
 ### Speech Recognition (ASR)
 This project implements Apple's native iOS ASR with [***SFSpeechRecognizer***](https://developer.apple.com/documentation/speech/sfspeechrecognizer).
 Behind other helper methods that validate app permissions and other conditions, sits the ```startAudioEngineAndNativeASR``` method, which does two main tasks:
