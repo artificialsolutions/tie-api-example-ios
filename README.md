@@ -1,4 +1,4 @@
-# tie-api-example-ios
+# iOS chat app example
 
 This project is an example iOS chat app for Teneo. The project demonstrates the following concepts:
 * Text input using the native iOS Speech Recognizer as well as manual text entry.
