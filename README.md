@@ -17,7 +17,7 @@ This sample project shows the capabilities of the TIE SDK, working in conjunctio
 
 
 ## Project details
-### TIE SDK connectivity.
+### TIE SDK connectivity
 This project follows TIE SDK connectivity guidelines which are fully detailed in [tie-api-example-ios](https://github.com/artificialsolutions/tie-api-example-ios) SDK. This dependency in the **Podfile** file enables the app to use the TIE SDK and communicate with Teneo Engine.
 
 The `viewDidLoad` method of the app initializes, among other things, the `TieApiService` and UI elements.
