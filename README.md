@@ -8,7 +8,7 @@ This project is an example iOS chat app for Teneo. The project demonstrates the 
 
 ## Prerequisites
 * You need to know the engine URL of a published bot.
-* Grant Microphone usage and Speech Recognition to enable voice commands on the app
+* Grant microphone and Speech Recognition access to enable voice commands on the app
 
 ## Installation
 * Clone the repository.
