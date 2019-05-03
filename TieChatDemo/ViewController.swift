@@ -477,6 +477,7 @@ class ViewController: MessagesViewController,
             ttsIOS.pauseSpeaking(at: .word)
         }
         let speechUtterance = AVSpeechUtterance(string: utterance)
+        speechUtterance.voice=AVSpeechSynthesisVoice(language: "en-US") //female English voice
         ttsIOS.speak(speechUtterance)
     }
     
