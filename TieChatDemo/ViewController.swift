@@ -50,8 +50,10 @@ class ViewController: MessagesViewController,
         setMicrophoneButtonToClosed(); //Initialize mic button as closed
         
         //Set up TeneoEngine service
-        let BASE_URL = "fill_in_base url_before_use";
-        let ENDPOINT = "fill_in_endpoint_url_before_use";
+        // the base url, including https://
+        let BASE_URL = "replace_with_base_url_of_teneo_engine";
+        // engine path, like /solution_0x383bjp5a8e6tscbjd9x03tvb/ note: make sure it ends with a slash (/)
+        let ENDPOINT = "replace_with_path_of_teneo_engine";
         
         //Setup TIE API
         do {
