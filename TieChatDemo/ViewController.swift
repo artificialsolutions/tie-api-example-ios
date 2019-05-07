@@ -239,7 +239,7 @@ class ViewController: MessagesViewController,
             }
             
             //Disables the microphone right after tapping it, and reenables it after 200 milliseconds.
-            //This allow the Audio object lifeycle enough time to free resources, and become available again.
+            //This allows the Audio object lifeycle enough time to free resources, and become available again.
             DispatchQueue.main.async {
                 self.timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector:  #selector(ViewController.enableMicWithDelay), userInfo: nil, repeats: false)
                 self.micEnabled=false
@@ -279,7 +279,7 @@ class ViewController: MessagesViewController,
         if(tooFast == false){
             //ignore fast mic taps during the next 300 mS
             tooFast = true
-            //allos mic taps again, after [tooFastConstant] seconds.
+            //allows mic taps again, after [tooFastConstant] seconds.
             tooFastTimer = Timer.scheduledTimer(timeInterval: tooFastConstant, target: self, selector:  #selector(ViewController.tooFastFalse), userInfo: nil, repeats: false)
             if(isNativeASRBusy==false){
                 do{
