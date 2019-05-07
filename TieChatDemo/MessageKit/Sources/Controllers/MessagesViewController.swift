@@ -117,7 +117,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
     private func setupDefaults() {
         extendedLayoutIncludesOpaqueBars = true
-        automaticallyAdjustsScrollViewInsets = false
+        messagesCollectionView.contentInsetAdjustmentBehavior = .never
         view.backgroundColor = .white
         messagesCollectionView.keyboardDismissMode = .interactive
         messagesCollectionView.alwaysBounceVertical = true
@@ -134,27 +134,15 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
     private func setupConstraints() {
         messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        var statusBarHeight:CGFloat = 0.0
-        if #available(iOS 11.0,  *) {
-            statusBarHeight = (UIApplication.shared.delegate?.window??.safeAreaInsets.top)! //iPhoneX and similar return 44. Notch-less devices return 20.
-        }
-        if(statusBarHeight>20){
-            statusBarHeight=30 //compensate for the notch
-        }
-        print(statusBarHeight)
-        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: topLayoutGuide.length + statusBarHeight)
+
         let bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        NSLayoutConstraint.activate([ bottom, trailing, leading])
         
-        if #available(iOS 11.0, *) {
-            let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-            let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-            NSLayoutConstraint.activate([top, bottom, trailing, leading])
-        } else {
-            let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-            let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            NSLayoutConstraint.activate([top, bottom, trailing, leading])
-        }
+        //Set top anchor, +iOS11
+        let guide = view.safeAreaLayoutGuide
+        messagesCollectionView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
     }
 
     // UICollectionViewDataSource

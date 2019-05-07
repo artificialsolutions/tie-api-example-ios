@@ -55,9 +55,10 @@ class ViewController: MessagesViewController,
         // engine path, like /solution_0x383bjp5a8e6tscbjd9x03tvb/ note: make sure it ends with a slash (/)
         let ENDPOINT = "replace_with_path_of_teneo_engine";
         
+        
         //Setup TIE API
         do {
-            try? TieApiService.sharedInstance.setup(BASE_URL, endpoint: ENDPOINT)
+            try TieApiService.sharedInstance.setup(BASE_URL, endpoint: ENDPOINT)
             print("TeneoEngine Service is SETUP")
         }catch {
             print("ERROR SETUP TeneoEngine service")
