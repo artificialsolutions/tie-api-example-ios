@@ -14,8 +14,9 @@ This project is an example iOS chat app for Teneo. The project demonstrates the 
 * Clone the repository.
 * Install the TIE dependency by running `pods install` in the project root folder.
 * Open the project in XCode by opening `TieChatDemo.xcworkspace`.
-* Set `baseUrl` and `solutionEndpoint` variables in the `ViewController.swift` class, to point to your Teneo engine.
-* Run the app.
+* Point the app at your bot's Teneo engine by setting the following variables in the `ViewController.swift` class:
+    * `baseUrl`, the base url of your engine, for example `https://myteam-4fe77f.bots.teneo.ai`
+    * `solutionEndpoint`, the path or endpoint of your engine, like `/longberry_baristas_0x383bjp5a8e6tscbjd9x03tvb` **Note: make sure it ends with a slash (/)**
 
 
 ## Project details
