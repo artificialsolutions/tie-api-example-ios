@@ -372,20 +372,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TieChatDemo/Pods-TieChatDemo-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Scaledrone/Scaledrone.framework",
-				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
-				"${BUILT_PRODUCTS_DIR}/TieApiClient/TieApiClient.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-TieChatDemo/Pods-TieChatDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Scaledrone.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TieApiClient.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-TieChatDemo/Pods-TieChatDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

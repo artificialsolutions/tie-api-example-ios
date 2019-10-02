@@ -6,6 +6,6 @@ target 'TieChatDemo' do
   use_frameworks!
 
   # Pods for TieChatDemo
-  pod 'TieApiClient', '~> 1.1.1'
+  pod 'TieApiClient', '~> 1.1.2'
   
 end
