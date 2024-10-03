@@ -1,5 +1,9 @@
 # Example iOS chat app for Teneo
 
+> [!IMPORTANT]
+> This project has been retired and archived  
+> If there is a need of continued use / development of this project for your own needs please feel free to fork the project - which will remain here in archived form.
+
 This project is an example iOS chat app for Teneo. The project demonstrates the following concepts:
 * Text input using the native iOS Speech Recognizer as well as manual text entry.
 * Spoken responses using the native iOS Text to Speech (TTS) capability.
